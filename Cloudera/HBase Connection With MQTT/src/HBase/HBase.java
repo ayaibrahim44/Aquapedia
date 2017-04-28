@@ -10,10 +10,6 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 import java.util.Properties;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -28,9 +24,7 @@ public class HBase implements MqttCallback{
 	public void testMQTT() {
 
 		String topic = "aqua";
-		
 
-		//String content = "{FirstName:Heba , LastName:badr}";
 		int qos = 2;
 		String broker = "tcp://m12.cloudmqtt.com:18232";
 		String clientId = "JavaSample";
@@ -51,17 +45,11 @@ public class HBase implements MqttCallback{
 			sampleClient.subscribe(topic);
 
 			System.out.println("Connected");
-			//System.out.println("Publishing message: " + content);
 			MqttMessage message = new MqttMessage(/* content.getBytes() */);
-			//message.setPayload(content.getBytes());
+
 
 			message.setQos(qos);
-			//sampleClient.publish(topic, message);
-			//System.out.println("Message published");
 
-			// sampleClient.disconnect();
-			// System.out.println("Disconnected");
-			// System.exit(0);
 		} catch (MqttException me) {
 			System.out.println("reason " + me.getReasonCode());
 			System.out.println("msg " + me.getMessage());
@@ -90,8 +78,6 @@ public class HBase implements MqttCallback{
 	    p.add(Bytes.toBytes("personal"), Bytes.toBytes("city"), Bytes.toBytes(message.toString()));
 	    htable.put(p);
 	    System.out.println("data inserted");
-		//KeyedMessage<String, String> kafkaMessage = new KeyedMessage<String, String>("aqua", message.toString());
-	//	producer.send(kafkaMessage);
 	}
 
 	@Override
@@ -101,12 +87,7 @@ public class HBase implements MqttCallback{
 	}
    public static void main(String[] args) throws IOException {
 	   HBase mqtt = new HBase();
-		mqtt.testMQTT();
-		Properties props = new Properties();
-		props.put("metadata.broker.list", "localhost:9092");
-		props.put("serializer.class","kafka.serializer.StringEncoder");
-		ProducerConfig config = new ProducerConfig(props); 
-        producer = new Producer<String, String>(config); 
+	   mqtt.testMQTT();
         
 
   }
